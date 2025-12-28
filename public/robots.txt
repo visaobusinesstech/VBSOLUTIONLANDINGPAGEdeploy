@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://visaobusiness.com.br/sitemap.xml
+
+# Crawl-delay (opcional)
+Crawl-delay: 1
+
+# Bloquear arquivos desnecess�rios
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+Disallow: /*.json$
+Disallow: /*.xml$
+Disallow: /_next/
+Disallow: /node_modules/
