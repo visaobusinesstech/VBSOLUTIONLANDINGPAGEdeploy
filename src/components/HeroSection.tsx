@@ -58,7 +58,7 @@ const HeroSection = () => {
               escale com <span className="text-gray-200 font-semibold">segurança</span>.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+            <div className="flex flex-row flex-wrap gap-3 sm:gap-6">
               <button 
                 onClick={handleScheduleDemo}
                 className="bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-xl border border-blue-500/30 shadow-lg transition-all duration-300 flex items-center justify-center gap-3 group hover:from-blue-700 hover:to-blue-800 hover:shadow-blue-500/40 hover:scale-105 font-satoshi min-w-[200px] sm:min-w-[220px] text-sm sm:text-base"

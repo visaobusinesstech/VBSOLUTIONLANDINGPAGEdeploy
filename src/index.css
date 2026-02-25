@@ -7,8 +7,10 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 10%;
+    --background: 220 40% 4%;
+    --foreground: 210 40% 98%;
+    --primary: 220 60% 12%;
+    --primary-foreground: 210 40% 98%;
 
     --card: 0 0% 6%;
     --card-foreground: 210 40% 98%;
@@ -23,7 +25,7 @@
     --secondary-foreground: 210 40% 98%;
 
     --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted-foreground: 215 20.2% 85%;
 
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
@@ -54,15 +56,30 @@
   }
 
   body {
-    @apply text-black;
+    @apply text-white;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 400;
+    background:
+      radial-gradient(60% 50% at 30% 25%, rgba(29, 78, 216, 0.55) 0%, rgba(29, 78, 216, 0.18) 42%, transparent 72%),
+      radial-gradient(50% 40% at 72% 58%, rgba(15, 43, 143, 0.60) 0%, rgba(15, 43, 143, 0.20) 48%, transparent 78%),
+      radial-gradient(42% 36% at 18% 82%, rgba(37, 99, 235, 0.45) 0%, rgba(37, 99, 235, 0.15) 52%, transparent 82%),
+      #080d1a;
+    color: hsl(var(--foreground));
   }
 
   /* Fonte global Helvetica Neue para todo o site */
   h1, h2, h3, h4, h5, h6, p, span, div, button, a, input, textarea, select, label {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
+  .font-satoshi {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+
+  section h2 {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 400;
+  }
+ 
 
   /* Fonte Inter para logo */
   .logo-text {
@@ -73,27 +90,88 @@
 
   /* Background tecnológico aprimorado - apenas preto, cinza, branco e azul */
   .tech-background {
-    background: linear-gradient(135deg, #000000 0%, #0a0a0a 25%, #0f0f0f 50%, #0a0a0a 75%, #000000 100%);
+    background:
+      radial-gradient(60% 50% at 30% 25%, rgba(29, 78, 216, 0.55) 0%, rgba(29, 78, 216, 0.18) 42%, transparent 72%),
+      radial-gradient(50% 40% at 72% 58%, rgba(15, 43, 143, 0.60) 0%, rgba(15, 43, 143, 0.20) 48%, transparent 78%),
+      radial-gradient(42% 36% at 18% 82%, rgba(37, 99, 235, 0.45) 0%, rgba(37, 99, 235, 0.15) 52%, transparent 82%),
+      #080d1a;
     position: relative;
   }
 
-  .tech-background::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-      radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.06) 0%, transparent 50%),
-      radial-gradient(circle at 40% 60%, rgba(59, 130, 246, 0.04) 0%, transparent 50%),
-      linear-gradient(135deg, transparent 30%, rgba(59, 130, 246, 0.02) 30%, rgba(59, 130, 246, 0.02) 70%, transparent 70%);
-    background-size: 800px 800px, 600px 600px, 400px 400px, 200px 200px;
-    background-position: 0 0, 100px 100px, 200px 200px, 300px 300px;
-    animation: backgroundFloat 30s ease-in-out infinite;
-    pointer-events: none;
+  @keyframes borderShift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+  }
+
+  .animated-blue-border {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .animated-blue-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #0f2b8f, #1d4ed8, #0f2b8f);
+    background-size: 300% 100%;
+    animation: borderShift 1.2s linear infinite;
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask-composite: exclude;
+    border-radius: inherit;
     z-index: -1;
+  }
+
+  @keyframes strokeColorShift {
+    0%   { -webkit-text-stroke: 2px #0f2b8f; }
+    50%  { -webkit-text-stroke: 2px #1d4ed8; }
+    100% { -webkit-text-stroke: 2px #0f2b8f; }
+  }
+
+  .fancy-stroke {
+    position: relative;
+    display: inline-block;
+    -webkit-text-stroke: 2px #0f2b8f;
+  }
+
+  .fancy-stroke::after { 
+    content: attr(data-text); 
+    position: absolute; 
+    inset: 0; 
+    color: transparent; 
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 2px #0f2b8f; 
+    text-shadow: 0 0 6px rgba(29, 78, 216, 0.7);
+    animation: strokeColorShift 1.1s linear infinite; 
+    pointer-events: none; 
+  } 
+
+  .crm-animated-border {
+    position: relative;
+    display: inline-block;
+    padding: 0.1rem 0.35rem;
+    border-radius: 0.4rem;
+  }
+
+  .crm-animated-border::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #0f2b8f, #1d4ed8, #0f2b8f);
+    background-size: 300% 100%;
+    animation: borderShift 1.2s linear infinite;
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask-composite: exclude;
+    padding: 2px;
+  }
+  .tech-background::before {
+    display: none;
   }
 
   /* Padrões tecnológicos pontilhados - apenas azul */
@@ -178,6 +256,19 @@
     border-radius: 50%;
     animation: smoke-float 15s linear infinite;
     filter: blur(10px);
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-marquee {
+    animation: marquee var(--duration, 40s) linear infinite;
+    will-change: transform;
+  }
+  .animate-marquee-reverse {
+    animation: marquee var(--duration, 40s) linear reverse infinite;
+    will-change: transform;
   }
 
   .smoke1 {
@@ -266,7 +357,7 @@
 
   /* Botões tecnológicos padronizados - apenas azul */
   .tech-button {
-    @apply relative overflow-hidden border border-[#3b82f6] bg-gradient-to-r from-[#3b82f6] to-[#3b82f6] text-white font-medium px-8 py-4 rounded-xl transition-all duration-500;
+    @apply relative overflow-hidden border border-[#0b1b3b] bg-gradient-to-r from-[#0b1b3b] to-[#0b1b3b] text-white font-medium px-8 py-4 rounded-xl transition-all duration-500;
     backdrop-filter: blur(10px);
   }
 
@@ -286,7 +377,7 @@
   }
 
   .tech-button:hover {
-    @apply bg-gradient-to-r from-[#3b82f6] to-[#3b82f6] border-[#3b82f6] shadow-2xl transform scale-105;
+    @apply bg-gradient-to-r from-[#0b1b3b] to-[#0b1b3b] border-[#0b1b3b] shadow-2xl transform scale-105;
     box-shadow: 
       0 10px 40px rgba(15, 23, 42, 0.35),
       0 0 0 1px rgba(15, 23, 42, 0.25);
@@ -294,7 +385,7 @@
 
   /* Botão de agendamento destacado - apenas azul */
   .schedule-button {
-    @apply relative bg-gradient-to-r from-[#3b82f6] via-[#3b82f6] to-[#3b82f6] text-white font-bold px-8 py-4 rounded-xl border-2 border-[#3b82f6] shadow-lg transition-all duration-500 transform;
+    @apply relative bg-gradient-to-r from-[#0b1b3b] via-[#0b1b3b] to-[#0b1b3b] text-white font-bold px-8 py-4 rounded-xl border-2 border-[#0b1b3b] shadow-lg transition-all duration-500 transform;
     backdrop-filter: blur(10px);
   }
 
@@ -304,7 +395,7 @@
     inset: 0;
     border-radius: inherit;
     padding: 2px;
-    background: linear-gradient(45deg, #3b82f6, #60a5fa, #3b82f6, #60a5fa);
+    background: linear-gradient(45deg, #0b1b3b, #142a52, #0b1b3b, #142a52);
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask-composite: exclude;
     animation: borderGlow 2s ease-in-out infinite;
@@ -419,6 +510,7 @@
     to { transform: rotate(360deg); }
   }
 
+
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
@@ -430,4 +522,5 @@
   .animate-spin-slow {
     animation: spin-slow 20s linear infinite;
   }
+
 }

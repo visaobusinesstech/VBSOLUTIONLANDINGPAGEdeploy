@@ -3,7 +3,6 @@ import * as React from 'react';
 const { useEffect } = React;
 import WhatsAppButton from '../components/WhatsAppButton';
 import TestimonialsSection from '../components/TestimonialsSection';
-import ContactForm from '../components/ContactForm';
 import SyntheticHero from '@/components/ui/synthetic-hero';
 import CentralNavbar from '../components/CentralNavbar';
 import Footer from '../components/Footer';
@@ -31,20 +30,15 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen w-full">
+    <div className="min-h-screen w-full tech-background">
       <CentralNavbar />
       
       <main>
         <SyntheticHero />
 
         <div className="relative">
-          <div className="fixed inset-0 bg-gradient-to-b from-white/80 via-blue-50/40 to-white/80" style={{zIndex: 1}} />
-          
-          <div className="relative z-10">
+          <div className="relative">
             <Faq />
-
-            <ContactForm />
-
             <Footer />
           </div>
         </div>

@@ -4,9 +4,10 @@ import { useMemo, useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { Button } from "@/components/ui/button";
+import { ShinyButton } from "./shiny-button";
 import { Badge } from "@/components/ui/badge";
-import { Crown, Check } from "lucide-react";
+import { Check, Cpu, Lock, Sparkles, Zap } from "lucide-react";
+import { getWhatsAppUrl } from "@/utils/whatsapp";
 import { motion } from "motion/react";
 import { useScroll, useTransform, motion as fmotion, MotionValue as FMotionValue } from "framer-motion";
 import vendasImg from "@/fotos/Prints do VBSolution/vendas.png";
@@ -17,7 +18,15 @@ import emailImg from "@/fotos/Prints do VBSolution/e-mail.jpeg";
 import whatsappPrintImg from "@/fotos/Prints do VBSolution/whatsapp.jpeg";
 import iaVideoSrc from "@/fotos/IA.video.mp4";
 import IntegracoesOficiais from "@/components/IntegracoesOficiais";
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
+import heroImg1 from "@/fotos/foto hero/Atividades.jpeg";
+import heroImg2 from "@/fotos/foto hero/vendas.png";
+import heroImg3 from "@/fotos/foto hero/whatsapp.jpg";
 import logooImg from "@/fotos/logoo.png";
+import { Features as Features9 } from "@/components/ui/features-9";
+import { FeaturesSectionWithHoverEffects } from "@/components/ui/feature-section-with-hover-effects";
+import { CallToAction } from "@/components/ui/cta-3";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 gsap.registerPlugin(useGSAP);
 
@@ -281,35 +290,7 @@ export const TestimonialsColumn = (props: {
         className="flex flex-col gap-6 pb-6"
       >
         {[
-          ...new Array(2).fill(0).map((_, index) => (
-            <div key={index}>
-              {props.testimonials.map(({ text, image, name, role }, i) => (
-                <div
-                  className="p-5 rounded-2xl border border-gray-200 shadow-sm max-w-[16rem] w-full bg-white mx-auto sm:mx-0 text-center sm:text-left"
-                  key={i}
-                >
-                  <div className="text-neutral-800 text-sm">{text}</div>
-                  <div className="flex items-center gap-2 mt-5 justify-center sm:justify-start">
-                    <img
-                      width={40}
-                      height={40}
-                      src={image}
-                      alt={name}
-                      className="h-9 w-9 rounded-full object-cover"
-                    />
-                    <div className="flex flex-col items-center sm:items-start">
-                      <div className="font-medium tracking-tight leading-5 text-sm">
-                        {name}
-                      </div>
-                      <div className="leading-5 opacity-60 tracking-tight text-xs">
-                        {role}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )),
+          ...new Array(2).fill(0).map((_, index) => null),
         ]}
       </motion.div>
     </div>
@@ -331,7 +312,7 @@ const SyntheticHero = ({
   badgeText = "Para agencias de Marketing & SaaS",
   badgeLabel = "Para agencias de Marketing & SaaS",
   ctaButtons = [
-    { text: "Quero vender mais", href: "https://api.whatsapp.com/send/?phone=5541997772066&text=Ol%C3%A1%20tudo%20bem%3F%20Tenho%20interesse%20em%20conhcer%20o%20VBSolution%20CRM%20solicito%20uma%20demonstra%C3%A7%C3%A3o%21&type=phone_number&app_absent=0", primary: true },
+    { text: "Agendar Demonstração", href: getWhatsAppUrl(), primary: true },
     { text: "Saiba mais", href: "#learn-more" },
   ],
   microDetails = [
@@ -348,6 +329,7 @@ const SyntheticHero = ({
   const microRef = useRef<HTMLUListElement | null>(null);
   const blurbRef = useRef<HTMLDivElement | null>(null);
   const [blurbHeight, setBlurbHeight] = useState<number>(0);
+  const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
   const shaderUniforms = useMemo(
     () => ({
       u_time: { value: 0 },
@@ -356,6 +338,13 @@ const SyntheticHero = ({
     }),
     []
   );
+  const [mediaOpen, setMediaOpen] = useState(false);
+  const [media, setMedia] = useState<{ type: "video" | "image"; src: string; alt?: string } | null>(null);
+
+  const openMedia = (m: { type: "video" | "image"; src: string; alt?: string }) => {
+    setMedia(m);
+    setMediaOpen(true);
+  };
 
   useEffect(() => {
     const update = () => {
@@ -365,6 +354,14 @@ const SyntheticHero = ({
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);
+
+  useEffect(() => {
+    if (!carouselApi) return;
+    const id = setInterval(() => {
+      try { carouselApi.scrollNext(); } catch {}
+    }, 3500);
+    return () => clearInterval(id);
+  }, [carouselApi]);
 
   useGSAP(
     () => {
@@ -426,211 +423,306 @@ const SyntheticHero = ({
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-[70vh] md:min-h-[80vh] w-full overflow-hidden"
+      className="relative min-h-[62vh] md:min-h-[80vh] w-full overflow-hidden"
     >
-      <div className="fixed inset-0">
-        <Canvas gl={{ antialias: true }} className="w-full h-full blur-[2px]">
-          <ShaderPlane
-            vertexShader={vertexShader}
-            fragmentShader={fragmentShader}
-            uniforms={shaderUniforms}
-          />
-        </Canvas>
-      </div>
+      
           <div className="relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 md:pt-36 pb-24 text-center">
-          <img
-            src={logooImg}
-            alt="Pipeline de Vendas"
-            className="mx-auto mb-2 w-40 md:w-56 h-auto"
-          />
-          <h1
-            ref={headingRef}
-            className="text-4xl md:text-6xl font-bold leading-tight text-black tracking-tight"
-          >
-            {title && title.includes("CRM") ? (
-              <>
-                {title.split("CRM")[0]}
-                <span className="text-black">CRM</span>
-                {title.split("CRM")[1]}
-              </>
-            ) : (
-              title
-            )}
-          </h1>
-          <p
-            ref={paragraphRef}
-            className="mt-6 text-lg md:text-xl text-gray-700 max-w-2xl mx-auto"
-          >
-            {description}
-          </p>
-          <div ref={ctaRef} className="mt-8 flex flex-wrap gap-4 justify-center">
-            {ctaButtons?.map((btn, i) =>
-              btn.primary ? (
-                <Button key={i} asChild className="bg-[#3b82f6] text-white hover:bg-[#3b82f6]/90">
-                  <a href={btn.href || "#"}>
-                    <Crown className="w-4 h-4 text-yellow-500" />
-                    {btn.text}
-                  </a>
-                </Button>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-24 pb-14 text-center">
+          <div className="mt-16 md:mt-24 lg:mt-32 min-h-[66vh] flex flex-col items-center justify-center">
+            <div className="w-full max-w-2xl px-3 md:px-4 -mt-2 md:-mt-3 mb-2">
+              <div className="flex items-center justify-center -space-x-2 rtl:space-x-reverse">
+                <img
+                  className="h-6 w-6 md:h-7 md:w-7 rounded-full border border-white/20 object-cover"
+                  src="https://images.unsplash.com/photo-1524503033411-c9566986fc8f?q=80&w=200&auto=format&fit=crop"
+                  alt="Pessoa 1"
+                  width={28}
+                  height={28}
+                />
+                <img
+                  className="h-6 w-6 md:h-7 md:w-7 rounded-full border border-white/20 object-cover"
+                  src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=200&auto=format&fit=crop"
+                  alt="Pessoa 2"
+                  width={28}
+                  height={28}
+                />
+                <img
+                  className="h-6 w-6 md:h-7 md:w-7 rounded-full border border-white/20 object-cover"
+                  src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=200&auto=format&fit=crop"
+                  alt="Pessoa 3"
+                  width={28}
+                  height={28}
+                />
+                <span className="animated-blue-border flex h-7 w-7 md:h-8 md:w-8 items-center justify-center rounded-full bg-white/5 text-[10px] md:text-[11px] font-medium text-white">
+                  +99
+                </span>
+              </div>
+            </div>
+            <img
+              src={logooImg}
+              alt="Pipeline de Vendas"
+              className="mx-auto mb-2 w-28 md:w-40 h-auto"
+            />
+            <h1
+              ref={headingRef}
+              className="text-3xl md:text-5xl font-normal leading-tight text-white tracking-tight"
+            >
+              {title && title.includes("CRM") ? (
+                <>
+                  {title.split("CRM")[0]}
+                  <span className="text-[#0f2b8f]">CRM</span>
+                  {title.split("CRM")[1]}
+                </>
               ) : (
-                <Button key={i} variant="outline" asChild className="border-[#3b82f6] text-[#3b82f6] hover:bg-[#3b82f6]/10">
-                  <a href={btn.href || "#"}>{btn.text}</a>
-                </Button>
-              )
-            )}
+                title
+              )}
+            </h1>
+            <p
+              ref={paragraphRef}
+              className="mt-4 text-xs sm:text-sm md:text-lg text-neutral-300 max-w-2xl mx-auto"
+            >
+              {description}
+            </p>
+            <div ref={ctaRef} className="mt-5 flex flex-wrap gap-3 sm:gap-4 justify-center">
+              {ctaButtons?.map((btn, i) => (
+                <a key={i} href={btn.href || "#"} className="inline-block">
+                  <ShinyButton
+                    className={btn.primary ? "" : "opacity-90 hover:opacity-100"}
+                    variant={btn.primary ? "solid" : "ghost"}
+                    size="sm"
+                    speed={btn.primary ? "normal" : "slow"}
+                    animated={btn.primary ? true : false}
+                  >
+                    {btn.primary ? (
+                      <span className="text-[11px] sm:text-base">{btn.text}</span>
+                    ) : (
+                      <span className="text-xs sm:text-base">{btn.text}</span>
+                    )}
+                  </ShinyButton>
+                </a>
+              ))}
+            </div>
+            <div className="mt-6 md:mt-8 lg:mt-10 w-full flex justify-center">
+              <Carousel
+                className="relative w-full max-w-xl md:max-w-2xl mx-auto rounded-t-[42px]"
+                setApi={setCarouselApi}
+              >
+                <CarouselContent>
+                  {[heroImg2].map((src, idx) => (
+                    <CarouselItem key={idx}>
+                      <div className="relative overflow-hidden rounded-t-[42px]">
+                        <img
+                          src={src}
+                          alt={`Hero ${idx + 1}`}
+                          className="block w-full h-auto max-h-72 md:max-h-80 object-cover rounded-t-[42px] cursor-zoom-in"
+                          onClick={() => openMedia({ type: "image", src, alt: "Vendas" })}
+                          style={{
+                            WebkitMaskImage:
+                              "linear-gradient(to bottom, rgba(0,0,0,1) 38%, rgba(0,0,0,0.25) 60%, rgba(0,0,0,0) 88%)",
+                            maskImage:
+                              "linear-gradient(to bottom, rgba(0,0,0,1) 38%, rgba(0,0,0,0.25) 60%, rgba(0,0,0,0) 88%)",
+                          }}
+                        />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
+            </div>
           </div>
-          <div className="mt-8">
-            <ContainerScroll titleComponent={null}>
-              <img
-                src={vendasImg}
-                alt="Pipeline de Vendas"
-                className="block w-full h-auto border-4 border-gray-300 rounded-2xl"
-              />
-            </ContainerScroll>
-          </div>
-          <IntegracoesOficiais className="mt-20" />
-          <section id="servicos" className="py-20">
-            <div className="mx-auto max-w-6xl px-6 text-center">
-              <h2 className="text-3xl md:text-4xl font-semibold">
+          <IntegracoesOficiais className="mt-6" />
+          <section id="servicos" className="py-14 md:py-20">
+            <div className="mx-auto max-w-6xl px-4 sm:px-6 text-center">
+              <h2 className="text-3xl md:text-4xl font-normal">
                 Tudo o que sua operação precisa.
                 <br />
-                <span className="text-neutral-500">Em um só lugar.</span>
+              <span className="text-neutral-300">Em um só lugar.</span>
               </h2>
-              <p className="mt-4 text-neutral-600 max-w-3xl mx-auto">
+            <p className="mt-3 md:mt-4 text-neutral-300 max-w-3xl mx-auto text-sm md:text-base">
                 O VBSolution conecta vendas, operações, comunicação e inteligência em módulos integrados, previsíveis e escaláveis.
               </p>
-              <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="mt-8 md:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {modules.map((module) => (
                   <div
                     key={module.title}
-                    className="group rounded-xl border border-blue-500/40 bg-white p-5 shadow-xl hover:shadow-2xl transition-all duration-300 shadow-blue-500/10 hover:-translate-y-1"
+                  className="group rounded-xl border border-blue-500/40 bg-[#0b1b3b] p-4 md:p-5 shadow-xl hover:shadow-2xl transition-all duration-300 shadow-blue-500/10 hover:-translate-y-1"
                   >
-                    <div className="mb-4 rounded-lg border border-blue-500/40 overflow-hidden">
+                  <div className="mb-3 md:mb-4 rounded-lg border border-blue-500/40 overflow-hidden bg-[#0b1b3b]">
                       <img
                         src={module.image}
                         alt={module.title}
-                        className="w-full h-auto max-h-44 object-contain transition-transform duration-500 group-hover:scale-105"
+                        className="w-full h-auto max-h-36 md:max-h-44 object-contain transition-transform duration-500 group-hover:scale-105"
                       />
                     </div>
-                    <h3 className="text-base font-medium text-neutral-900">{module.title}</h3>
-                    <p className="mt-1 text-sm text-neutral-600">{module.description}</p>
+                  <h3 className="text-sm md:text-base font-medium text-neutral-100">{module.title}</h3>
+                  <p className="mt-1 text-xs md:text-sm text-neutral-200">{module.description}</p>
                   </div>
                 ))}
               </div>
             </div>
           </section>
-          <section className="py-20">
-            <div className="mx-auto max-w-6xl px-6">
-              <div className="text-center">
-                <h2 className="text-3xl md:text-4xl font-semibold">
+          <section className="relative py-8 md:py-28">
+            <div className="mx-auto max-w-5xl space-y-6 md:space-y-8 px-6">
+              <div className="relative z-10 text-center max-w-2xl mx-auto">
+                <h2 className="text-2xl md:text-3xl font-normal tracking-tight leading-tight text-neutral-100">
                   Transforme conversas em vendas com Inteligência Artificial
                 </h2>
-                <p className="mt-4 text-neutral-600 max-w-3xl mx-auto">
-                  Automatize atendimentos, qualifique leads e aumente conversões com uma IA treinada para o seu negócio.
-                </p>
               </div>
 
-              <div className="mt-12 grid lg:grid-cols-2 gap-8 items-start">
-                <video
-                  src={iaVideoSrc}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="rounded-2xl border border-blue-500/50 shadow-2xl shadow-blue-500/20 w-full h-auto max-h-[520px] md:max-h-[620px] object-contain bg-transparent transition-all duration-300 hover:-translate-y-1"
-                />
-                <div className="flex flex-col justify-between">
-                  {[
-                    "Qualifica leads automaticamente",
-                    "Realiza agendamentos",
-                    "Responde clientes em tempo real 24/7",
-                    "Segue regras do seu negócio",
-                    "Aumenta a taxa de conversão",
-                    "Reduz esforço operacional",
-                    "Totalmente integrado ao seu pipeline",
-                  ].map((point) => (
-                    <div
-                      key={point}
-                      className="flex items-start gap-3 py-2 animate-fade-in"
-                    >
-                      <div className="w-6 h-6 bg-[#3b82f6] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Check className="w-4 h-4 text-white" />
-                      </div>
-                      <p className="text-neutral-800">{point}</p>
+              <div className="relative rounded-3xl p-3 md:-mx-6 max-w-4xl mx-auto ring-1 ring-white/10 bg-white/5 backdrop-blur-md overflow-hidden shadow-2xl shadow-blue-500/10">
+                <div
+                  className="aspect-[21/9] relative cursor-zoom-in"
+                  role="button"
+                  aria-label="Ampliar vídeo"
+                  onClick={() => openMedia({ type: "video", src: iaVideoSrc })}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b1b3b]/60 to-transparent"></div>
+                  <div className="pointer-events-none absolute inset-0 [background:linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:28px_28px] opacity-40" />
+                  <video
+                    src={iaVideoSrc}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full rounded-2xl object-cover saturate-110 pointer-events-none"
+                  />
+                </div>
+              </div>
+
+              <div className="relative mx-auto grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-8 lg:grid-cols-4">
+                <div className="group space-y-3 p-4 rounded-xl ring-1 ring-white/10 bg-white/5 hover:bg-white/10 backdrop-blur-[1.5px] transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/10">
+                  <div className="flex items-center gap-2">
+                    <div className="size-7 rounded-full bg-white/10 ring-1 ring-white/10 flex items-center justify-center">
+                      <Zap className="size-4 text-neutral-100" />
                     </div>
-                  ))}
-                  <div className="mt-8 rounded-2xl border border-blue-500/50 bg-gradient-to-r from-blue-50 to-white p-6 text-neutral-900 shadow-xl hover:shadow-2xl transition-all duration-300">
-                    <p className="text-lg md:text-xl font-medium">
-                      Seu time vende quando está online. <br className="hidden sm:block" />
-                      Seu Agente de IA vende o tempo todo.
-                    </p>
+                    <h3 className="text-sm font-medium text-neutral-100">Qualifica</h3>
                   </div>
+                  <p className="text-sm text-neutral-400">Qualifica leads automaticamente.</p>
+                </div>
+                <div className="group space-y-3 p-4 rounded-xl ring-1 ring-white/10 bg-white/5 hover:bg-white/10 backdrop-blur-[1.5px] transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/10">
+                  <div className="flex items-center gap-2">
+                    <div className="size-7 rounded-full bg-white/10 ring-1 ring-white/10 flex items-center justify-center">
+                      <Cpu className="size-4 text-neutral-100" />
+                    </div>
+                    <h3 className="text-sm font-medium text-neutral-100">Agenda</h3>
+                  </div>
+                  <p className="text-sm text-neutral-400">Realiza agendamentos.</p>
+                </div>
+                <div className="group space-y-3 p-4 rounded-xl ring-1 ring-white/10 bg-white/5 hover:bg-white/10 backdrop-blur-[1.5px] transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/10">
+                  <div className="flex items-center gap-2">
+                    <div className="size-7 rounded-full bg-white/10 ring-1 ring-white/10 flex items-center justify-center">
+                      <Sparkles className="size-4 text-neutral-100" />
+                    </div>
+                    <h3 className="text-sm font-medium text-neutral-100">24/7</h3>
+                  </div>
+                  <p className="text-sm text-neutral-400">Responde clientes em tempo real 24/7.</p>
+                </div>
+                <div className="group space-y-3 p-4 rounded-xl ring-1 ring-white/10 bg-white/5 hover:bg-white/10 backdrop-blur-[1.5px] transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/10">
+                  <div className="flex items-center gap-2">
+                    <div className="size-7 rounded-full bg-white/10 ring-1 ring-white/10 flex items-center justify-center">
+                      <Lock className="size-4 text-neutral-100" />
+                    </div>
+                    <h3 className="text-sm font-medium text-neutral-100">Regras</h3>
+                  </div>
+                  <p className="text-sm text-neutral-400">Segue regras do seu negócio.</p>
                 </div>
               </div>
+
+            <div className="mx-auto flex justify-center gap-3">
+              <a href={getWhatsAppUrl()} className="inline-block">
+                <ShinyButton size="sm">
+                  <span className="text-[11px] sm:text-base">Agendar Demonstração</span>
+                </ShinyButton>
+              </a>
+              <a href="/planos" className="inline-block">
+                <ShinyButton className="opacity-90 hover:opacity-100" variant="ghost" size="sm" speed="slow" animated={false}>
+                  <span className="text-xs sm:text-base">Consultar Planos</span>
+                </ShinyButton>
+              </a>
+            </div>
             </div>
           </section>
           
           
-          <section className="py-20">
-            <div className="mx-auto max-w-6xl px-6">
-              <div className="text-center">
-                <h2 className="text-3xl md:text-4xl font-semibold">
-                  Uma pipeline inteligente para vendas
-                </h2>
-                <p className="mt-4 text-neutral-600 max-w-3xl mx-auto">
-                  A pipeline de vendas do VBSolution transforma oportunidades em um processo claro, organizado, do primeiro contato ao fechamento.
-                </p>
+          <section className="py-6 md:py-14">
+            <div className="mx-auto max-w-6xl space-y-6 px-6">
+              <div className="relative z-10 grid items-start gap-4 md:grid-cols-2 md:gap-6">
+                <h2 className="text-3xl md:text-4xl font-normal tracking-tight leading-tight text-neutral-100">Uma pipeline inteligente para vendas</h2>
+                <p className="max-w-sm text-xs md:text-sm text-neutral-400">A pipeline de vendas do VBSolution transforma oportunidades em um processo claro, organizado, do primeiro contato ao fechamento.</p>
               </div>
-              <div className="mt-12 grid lg:grid-cols-2 gap-8 items-center">
-                <div className="order-1 lg:order-2">
-                  <div className="rounded-2xl border border-blue-500/40 shadow-xl shadow-blue-500/10 overflow-hidden bg-white">
-                    <img
-                      src={vendasImg}
-                      alt="Pipeline de Vendas"
-                      className="w-full h-auto object-contain"
-                    />
-                  </div>
+              <div className="relative rounded-3xl p-3 md:-mx-6 max-w-4xl mx-auto ring-1 ring-white/10 bg-white/5 backdrop-blur-md overflow-hidden shadow-2xl shadow-blue-500/10">
+                <div
+                  className="aspect-[21/9] relative cursor-zoom-in"
+                  role="button"
+                  aria-label="Ampliar imagem"
+                  onClick={() => openMedia({ type: "image", src: vendasImg, alt: "Pipeline de Vendas" })}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b1b3b]/60 to-transparent"></div>
+                  <img src={vendasImg} className="absolute inset-0 w-full h-full rounded-2xl object-cover saturate-110" alt="Pipeline de Vendas" />
                 </div>
-                <div className="order-2 lg:order-1">
-                  <div className="space-y-3">
-                    {[
-                      "Funil visual estilo Kanban",
-                      "Etapas personalizáveis",
-                      "Integração total com WhatsApp e IA",
-                      "Histórico completo por oportunidade",
-                    ].map((point) => (
-                      <div key={point} className="flex items-start gap-3">
-                        <div className="w-6 h-6 bg-[#3b82f6] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <Check className="w-4 h-4 text-white" />
-                        </div>
-                        <p className="text-neutral-800">{point}</p>
-                      </div>
-                    ))}
+              </div>
+              <div className="relative mx-auto grid grid-cols-2 gap-x-3 gap-y-4 sm:gap-5 lg:grid-cols-4">
+                <div className="group rounded-xl p-4 bg-white/[0.03] hover:bg-white/[0.06] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Zap className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
+                    <h3 className="text-sm font-medium text-neutral-100">Funil visual estilo Kanban</h3>
                   </div>
-                  <div className="mt-8 rounded-2xl border border-blue-500/50 bg-gradient-to-r from-blue-50 to-white p-6 text-neutral-900 shadow-xl">
-                    <span>Quando o processo é claro,</span>
-                    <br />
-                    <span>o fechamento acontece.</span>
-                  </div>
+                  <p className="text-neutral-400 text-sm mt-2">Organização clara das oportunidades para fluxo ágil.</p>
                 </div>
+                <div className="group rounded-xl p-4 bg-white/[0.03] hover:bg-white/[0.06] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
+                    <h3 className="text-sm font-medium text-neutral-100">Etapas personalizáveis</h3>
+                  </div>
+                  <p className="text-neutral-400 text-sm mt-2">Ajuste cada fase conforme o seu processo.</p>
+                </div>
+                <div className="group rounded-xl p-4 bg-white/[0.03] hover:bg-white/[0.06] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Cpu className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
+                    <h3 className="text-sm font-medium text-neutral-100">Integração total com WhatsApp e IA</h3>
+                  </div>
+                  <p className="text-neutral-400 text-sm mt-2">Ações rápidas e automações conectadas.</p>
+                </div>
+                <div className="group rounded-xl p-4 bg-white/[0.03] hover:bg-white/[0.06] transition-colors">
+                  <div className="flex items-center gap-2">
+                    <Lock className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
+                    <h3 className="text-sm font-medium text-neutral-100">Histórico completo por oportunidade</h3>
+                  </div>
+                  <p className="text-neutral-400 text-sm mt-2">Rastreamento preciso de interações e evolução.</p>
+                </div>
+              </div>
+              <div className="flex mt-4 mx-auto justify-center gap-3">
+                <a href={getWhatsAppUrl()} className="inline-block">
+                  <ShinyButton size="sm">
+                    <span className="text-[11px] sm:text-base">Agendar Demonstração</span>
+                  </ShinyButton>
+                </a>
+                <a href="/planos" className="inline-block">
+                  <ShinyButton className="opacity-90 hover:opacity-100" variant="ghost" size="sm" speed="slow" animated={false}>
+                    <span className="text-xs sm:text-base">Consultar Planos</span>
+                  </ShinyButton>
+                </a>
               </div>
             </div>
           </section>
-          <section className="pt-16 pb-8">
+          <Features9 />
+          <Dialog open={mediaOpen} onOpenChange={setMediaOpen}>
+            <DialogContent className="p-0 bg-transparent border-none shadow-none max-w-5xl w-[92vw]">
+              <div className="relative w-full aspect-[21/9] rounded-2xl ring-1 ring-white/10 overflow-hidden bg-black">
+                {media?.type === "video" ? (
+                  <video src={media?.src} controls autoPlay className="absolute inset-0 w-full h-full object-contain rounded-2xl" />
+                ) : (
+                  <img src={media?.src || ""} alt={media?.alt || ""} className="absolute inset-0 w-full h-full object-contain rounded-2xl" />
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
+          <section className="pt-8 pb-4">
             <div className="mx-auto max-w-6xl px-6">
-              <div className="grid lg:grid-cols-2 gap-8 items-start">
+              <div className="grid lg:grid-cols-2 gap-2 md:gap-6 lg:gap-8 items-start">
                 <div ref={blurbRef}>
-                  <h2 className="text-3xl md:text-4xl font-semibold text-neutral-900 text-left">
-                    <span>Crescimento previsível</span>
-                    <span className="sm:block">{" "}começa com tecnologia sólida</span>
-                    <span className="sm:block">{" "}e suporte que entende sua operação.</span>
-                  </h2>
-                  <p className="mt-4 text-neutral-700 max-w-xl text-left">
-                    No VBSolution, você não recebe apenas um CRM. Você recebe um time que
-                    acompanha sua operação, apoia sua implementação e garante que cada
-                    métrica avance.
-                  </p>
+                  <h3 className="text-xl md:text-2xl font-normal text-neutral-100 text-center mt-0 mb-0">
+                    Benefícios do VBSolution CRM
+                  </h3>
                 </div>
                 <div
                   className="overflow-hidden max-w-xl ml-auto"
@@ -645,6 +737,14 @@ const SyntheticHero = ({
                   </div>
                 </div>
               </div>
+              <div className="mt-3">
+                <FeaturesSectionWithHoverEffects />
+              </div>
+            </div>
+          </section>
+          <section className="pt-6 pb-6">
+            <div className="mx-auto max-w-6xl px-6 text-center">
+              <CallToAction />
             </div>
           </section>
         </div>

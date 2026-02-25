@@ -4,6 +4,7 @@ import CentralNavbar from '../components/CentralNavbar';
 import Footer from '../components/Footer';
 import WhatsAppButton from '../components/WhatsAppButton';
 import { Zap, BarChart3, Code, Clock, Users, Award, ArrowRight, Check, Target, Shield, Rocket } from 'lucide-react';
+import { ShinyButton } from '@/components/ui/shiny-button';
 
 const ServicesPage = () => {
   useEffect(() => {
@@ -171,9 +172,9 @@ const ServicesPage = () => {
                     ))}
                   </ul>
                   
-                  <button className="w-full bg-transparent border-2 border-blue-500 text-blue-500 px-6 py-3 rounded-lg font-semibold hover:bg-blue-500 hover:text-white transition-all duration-300">
+                  <ShinyButton variant="ghost" size="md" speed="slow" animated={false} className="w-full opacity-90 hover:opacity-100">
                     Saiba mais
-                  </button>
+                  </ShinyButton>
                 </div>
               ))}
             </div>

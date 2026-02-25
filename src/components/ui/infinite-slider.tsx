@@ -7,6 +7,7 @@ type InfiniteSliderProps = React.PropsWithChildren<
     reverse?: boolean;
     speed?: number;
     speedOnHover?: number;
+    padX?: number;
     className?: string;
   } & React.ComponentProps<"div">
 >;
@@ -17,6 +18,7 @@ export function InfiniteSlider({
   reverse = false,
   speed = 18,
   speedOnHover = 12,
+  padX = 0,
   className,
   ...props
 }: InfiniteSliderProps) {
@@ -25,6 +27,8 @@ export function InfiniteSlider({
 
   const trackStyle: React.CSSProperties = {
     gap: `${gap}px`,
+    paddingLeft: `${padX}px`,
+    paddingRight: `${padX}px`,
     animationName: reverse ? "infinite-scroll-reverse" : "infinite-scroll",
     animationDuration: `${duration}s`,
     animationTimingFunction: "linear",

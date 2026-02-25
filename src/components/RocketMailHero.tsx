@@ -64,7 +64,7 @@ const RocketMailHero = () => {
             </div>
             
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-row flex-wrap gap-3">
               <button 
                 onClick={handleScheduleDemo}
                 className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 inline-flex items-center justify-center shadow-lg hover:shadow-blue-500/30 hover:scale-105 font-satoshi"

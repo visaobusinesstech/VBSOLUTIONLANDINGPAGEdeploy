@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { BarChart3, Zap, Settings, ArrowRight, Globe, Users, Rocket } from 'lucide-react';
+import { ShinyButton } from './ui/shiny-button';
 const ServicesShowcase = () => {
   const services = [{
     title: "Automações Inteligentes",
@@ -61,9 +62,12 @@ const ServicesShowcase = () => {
                 <div className="text-sm font-semibold text-blue-400">{service.stats}</div>
               </div>
               
-              <Link to={service.href} className="inline-flex items-center justify-center w-full bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/40 text-blue-400 px-6 py-3 rounded-xl transition-all duration-300 group-hover:scale-105">
-                Saiba mais
-                <ArrowRight className="w-4 h-4 ml-2" />
+              <Link to={service.href} className="inline-flex items-center justify-center w-full">
+                <ShinyButton variant="ghost" size="md" speed="slow" animated={false} className="w-full opacity-90 hover:opacity-100">
+                  <span className="inline-flex items-center">
+                    Saiba mais <ArrowRight className="w-4 h-4 ml-2" />
+                  </span>
+                </ShinyButton>
               </Link>
             </div>)}
         </div>

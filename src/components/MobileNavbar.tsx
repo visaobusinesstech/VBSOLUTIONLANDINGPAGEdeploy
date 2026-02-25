@@ -11,7 +11,8 @@ const MobileNavbar = () => {
     { name: 'Início', href: '/' },
     { name: 'Serviços', href: '#servicos' },
     { name: 'FAQ', href: '#faq' },
-    { name: 'Contato', href: '#contato' }
+    { name: 'Planos', href: '/planos' },
+    { name: 'Contato', href: '/contato' }
   ];
 
   const serviceItems: Array<{ name: string; href: string }> = [];
@@ -56,27 +57,33 @@ const MobileNavbar = () => {
                 src="/lovable-uploads/18f2c9f2-1632-4bf2-b0aa-70a38d4e33b6.png"
                 alt="VB Logo"
                 className="h-8 w-auto"
-                style={{ filter: 'brightness(0)' }}
+                style={{ filter: 'brightness(0) invert(1)' }}
               />
             </a>
 
             {/* Links principais - sempre visíveis */}
             <div className="flex items-center space-x-3">
               <a
-                href="#servicos"
-                className="text-xs font-medium transition-all duration-300 px-2 py-1 rounded-full text-black hover:bg-black/10 hover:text-blue-600"
+                href={location.pathname === '/planos' ? '/' : '#servicos'}
+                className="text-xs font-medium transition-all duration-300 px-2 py-1 rounded-full text-white hover:bg-white/10 hover:text-white"
               >
                 Serviços
               </a>
               <a
                 href="#faq"
-                className="text-xs font-medium transition-all duration-300 px-2 py-1 rounded-full text-black hover:bg-black/10 hover:text-blue-600"
+                className="text-xs font-medium transition-all duration-300 px-2 py-1 rounded-full text-white hover:bg-white/10 hover:text-white"
               >
                 FAQ
               </a>
               <a
-                href="#contato"
-                className="text-xs font-medium transition-all duration-300 px-2 py-1 rounded-full text-black hover:bg-black/10 hover:text-blue-600"
+                href="/planos"
+                className="text-xs font-medium transition-all duration-300 px-2 py-1 rounded-full text-white hover:bg-white/10 hover:text-white"
+              >
+                Planos
+              </a>
+              <a
+                href="/contato"
+                className="text-xs font-medium transition-all duration-300 px-2 py-1 rounded-full text-white hover:bg-white/10 hover:text-white"
               >
                 Contato
               </a>
@@ -128,15 +135,21 @@ const MobileNavbar = () => {
                 <h3 className="text-white/60 text-xs font-medium uppercase tracking-wider mb-3">
                   Navegação
                 </h3>
-                {mainMenuItems.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className="block w-full text-left px-4 py-3 rounded-lg font-medium transition-all duration-300 text-black hover:bg-black/10 hover:text-blue-600"
-                  >
-                    {item.name}
-                  </a>
-                ))}
+                {mainMenuItems.map((item) => {
+                  const itemHref =
+                    location.pathname === '/planos' && item.name === 'Serviços'
+                      ? '/'
+                      : item.href;
+                  return (
+                    <a
+                      key={item.name}
+                      href={itemHref}
+                      className="block w-full text-left px-4 py-3 rounded-lg font-medium transition-all duration-300 text-white hover:bg-white/10 hover:text-white"
+                    >
+                      {item.name}
+                    </a>
+                  );
+                })}
               </div>
 
               {/* Links de serviços */}
@@ -148,7 +161,7 @@ const MobileNavbar = () => {
                   <a
                     key={item.name}
                     href={item.href}
-                    className="block w-full text-left px-4 py-3 rounded-lg font-medium transition-all duration-300 text-black hover:bg-black/10 hover:text-blue-600"
+                    className="block w-full text-left px-4 py-3 rounded-lg font-medium transition-all duration-300 text-white hover:bg-white/10 hover:text-white"
                   >
                     {item.name}
                   </a>
