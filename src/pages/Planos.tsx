@@ -208,9 +208,14 @@ export default function Planos() {
                   </span>
                 </div>
               </div>
-              <button className="mt-3 w-full h-10 rounded-md bg-zinc-100 text-[#0B1220] text-sm font-semibold hover:bg-zinc-200 transition-colors duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0b2a7e] focus-visible:ring-offset-2 focus-visible:ring-offset-white border border-neutral-300">
+              <a
+                href="https://www.vbsolution.com.br/register"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 w-full h-10 rounded-md bg-zinc-100 text-[#0B1220] text-sm font-semibold hover:bg-zinc-200 transition-colors duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0b2a7e] focus-visible:ring-offset-2 focus-visible:ring-offset-white border border-neutral-300 flex items-center justify-center"
+              >
                 COMECE AGORA
-              </button>
+              </a>
             </div>
             <ul className="px-6 py-5 space-y-0 text-sm">
               {[
@@ -256,9 +261,14 @@ export default function Planos() {
                   </span>
                 </div>
               </div>
-              <button className="mt-3 w-full h-10 rounded-md bg-zinc-100 text-[#0B1220] text-sm font-semibold hover:bg-zinc-200 transition-colors duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white border border-neutral-300">
+              <a
+                href="https://www.vbsolution.com.br/register"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 w-full h-10 rounded-md bg-zinc-100 text-[#0B1220] text-sm font-semibold hover:bg-zinc-200 transition-colors duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white border border-neutral-300 flex items-center justify-center"
+              >
                 COMECE AGORA
-              </button>
+              </a>
             </div>
             <ul className="px-6 py-5 space-y-0 text-sm">
               {[
@@ -314,9 +324,14 @@ export default function Planos() {
                   </span>
                 </div>
               </div>
-              <button className="mt-3 w-full h-10 rounded-md bg-[#0b2a7e] text-white text-sm font-semibold hover:bg-[#0a256a] transition-colors duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0b2a7e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0c0f1a] border border-[#0b2a7e]">
+              <a
+                href="https://www.vbsolution.com.br/register"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 w-full h-10 rounded-md bg-[#0b2a7e] text-white text-sm font-semibold hover:bg-[#0a256a] transition-colors duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0b2a7e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0c0f1a] border border-[#0b2a7e] flex items-center justify-center"
+              >
                 COMECE AGORA
-              </button>
+              </a>
             </div>
             <ul className="px-6 py-5 space-y-0 text-sm">
               {[

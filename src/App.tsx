@@ -7,6 +7,7 @@ import NotFound from "./pages/NotFound";
 import HeroDemo from "./pages/HeroDemo";
 import ContactPage from "./pages/ContactPage";
 import Planos from "./pages/Planos";
+import PlanosPreview from "./pages/PlanosPreview";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
             <Route path="/demo" element={<HeroDemo />} />
             <Route path="/contato" element={<ContactPage />} />
             <Route path="/planos" element={<Planos />} />
+            <Route path="/planos-preview" element={<PlanosPreview />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

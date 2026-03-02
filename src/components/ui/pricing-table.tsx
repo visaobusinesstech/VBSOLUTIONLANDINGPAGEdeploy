@@ -160,16 +160,20 @@ export function PricingTable({
                 </p>
               )}
 
-              <div
+              <a
+                href="https://www.vbsolution.com.br/register"
+                target="_blank"
+                rel="noopener noreferrer"
                 className={cn(
                   "w-full py-2 px-4 rounded-md text-center text-sm font-semibold transition-colors mt-auto",
                   selectedPlan === plan.level
                     ? "bg-[#0b2a7e] text-white hover:bg-[#0a256a] border border-[#0b2a7e]"
                     : "bg-zinc-100 text-[#0B1220] hover:bg-zinc-200 border border-neutral-300"
                 )}
+                onClick={(e) => e.stopPropagation()}
               >
                 {plan.buttonText || "Comece agora"}
-              </div>
+              </a>
             </button>
           ))}
         </div>
