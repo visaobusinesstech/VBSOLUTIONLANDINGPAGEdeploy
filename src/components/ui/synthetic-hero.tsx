@@ -17,6 +17,7 @@ import iaImg from "@/fotos/Prints do VBSolution/IAfunc.jpeg";
 import emailImg from "@/fotos/Prints do VBSolution/e-mail.jpeg";
 import whatsappPrintImg from "@/fotos/Prints do VBSolution/whatsapp.jpeg";
 import iaVideoSrc from "@/fotos/IA.video.mp4";
+import vendasPipelineVideo from "@/fotos/vendas01.mov";
 import IntegracoesOficiais from "@/components/IntegracoesOficiais";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 import heroImg1 from "@/fotos/foto hero/Atividades.jpeg";
@@ -653,11 +654,18 @@ const SyntheticHero = ({
                 <div
                   className="aspect-[21/9] relative cursor-zoom-in"
                   role="button"
-                  aria-label="Ampliar imagem"
-                  onClick={() => openMedia({ type: "image", src: vendasImg, alt: "Pipeline de Vendas" })}
+                  aria-label="Ampliar vídeo"
+                  onClick={() => openMedia({ type: "video", src: vendasPipelineVideo })}
                 >
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0b1b3b]/60 to-transparent"></div>
-                  <img src={vendasImg} className="absolute inset-0 w-full h-full rounded-2xl object-cover saturate-110" alt="Pipeline de Vendas" />
+                  <video
+                    src={vendasPipelineVideo}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full rounded-2xl object-cover saturate-110 pointer-events-none"
+                  />
                 </div>
               </div>
               <div className="relative mx-auto grid grid-cols-2 gap-x-3 gap-y-4 sm:gap-5 lg:grid-cols-4">
