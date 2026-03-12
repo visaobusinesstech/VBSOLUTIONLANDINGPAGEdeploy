@@ -17,7 +17,6 @@ import iaImg from "@/fotos/Prints do VBSolution/IAfunc.jpeg";
 import emailImg from "@/fotos/Prints do VBSolution/e-mail.jpeg";
 import whatsappPrintImg from "@/fotos/Prints do VBSolution/whatsapp.jpeg";
 import iaVideoSrc from "@/fotos/IA.video.mp4";
-import videoIA from "@/fotos/videoIA.mov";
 import vendasPipelineVideo from "@/fotos/vendas01.mov";
 import IntegracoesOficiais from "@/components/IntegracoesOficiais";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
@@ -334,12 +333,12 @@ const VideoIASection = ({
         role="button"
         tabIndex={0}
         aria-label="Ampliar vídeo em tela cheia"
-        onClick={() => openMedia({ type: "video", src: videoIA })}
-        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && openMedia({ type: "video", src: videoIA })}
+        onClick={() => openMedia({ type: "video", src: iaVideoSrc })}
+        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && openMedia({ type: "video", src: iaVideoSrc })}
       >
         <video
           ref={videoRef}
-          src={videoIA}
+          src={iaVideoSrc}
           autoPlay
           muted={isMuted}
           loop

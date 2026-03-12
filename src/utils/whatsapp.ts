@@ -1,4 +1,4 @@
-export const DEFAULT_WHATSAPP_PHONE = '5541997772066';
+export const DEFAULT_WHATSAPP_PHONE = '5541988347178';
 export const DEFAULT_WHATSAPP_TEXT =
   'Olá tudo bem? Tenho interesse em conhecer o VBSolution CRM solicito uma demonstração!';
 
