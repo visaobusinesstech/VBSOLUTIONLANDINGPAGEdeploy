@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useRef, useLayoutEffect } from "react";
 import CentralNavbar from "../components/CentralNavbar";
 import Footer from "../components/Footer";
 import { Code } from "lucide-react";
@@ -27,6 +27,25 @@ const formatPrice = (v: number) => `R$${v}/por mês`;
 
 export default function Planos() {
   const [cycle, setCycle] = useState<Cycle>("anual");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const annualRef = useRef<HTMLButtonElement>(null);
+  const semestralRef = useRef<HTMLButtonElement>(null);
+  const mensalRef = useRef<HTMLButtonElement>(null);
+  const [pill, setPill] = useState({ left: 0, width: 0 });
+
+  const cycleToRef = { anual: annualRef, semestral: semestralRef, mensal: mensalRef } as const;
+
+  useLayoutEffect(() => {
+    const btn = cycleToRef[cycle].current;
+    const container = containerRef.current;
+    if (!btn || !container) return;
+    const cRect = container.getBoundingClientRect();
+    const bRect = btn.getBoundingClientRect();
+    setPill({
+      left: bRect.left - cRect.left,
+      width: bRect.width,
+    });
+  }, [cycle]);
 
   const emphasize = (text: string) => {
     const regex =
@@ -148,41 +167,77 @@ export default function Planos() {
           </p>
         </div>
 
-        <div className="mt-4 sm:mt-6 flex justify-center">
-          <div className="relative bg-white rounded-full px-1 py-1 w-[280px] h-11 flex items-center border border-neutral-300">
+        <div className="mt-6 sm:mt-8 flex justify-center">
+          <div className="relative rounded-full overflow-hidden inline-block">
             <div
-              className={`absolute left-3 top-1.5 h-8 w-24 rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.06),0_4px_10px_rgba(0,0,0,0.06)] transition-transform duration-200 ease-out will-change-transform ${
-                cycle === "anual"
-                  ? "translate-x-0"
-                  : cycle === "semestral"
-                  ? "translate-x-[84px]"
-                  : "translate-x-[168px]"
-              }`}
+              className="absolute inset-0 rounded-full animate-shiny-toggle-spin"
+              style={{
+                background: "conic-gradient(from 0deg, transparent 72deg, #0f2b8f 90deg, white 108deg, #0f2b8f 126deg, transparent 360deg)",
+              }}
+              aria-hidden
             />
-            <button
-              onClick={() => setCycle("anual")}
-              className={`relative z-10 w-28 h-9 rounded-full text-sm transition-colors duration-200 ease-out ${
-                cycle === "anual" ? "text-[#0b2a7e] font-semibold bg-neutral-200" : "text-neutral-600"
-              }`}
+            <div
+              ref={containerRef}
+              role="group"
+              aria-label="Ciclo de cobrança"
+              className="relative inline-flex items-center gap-1 rounded-full p-1 min-w-0 m-[2px] overflow-hidden isolation-isolate backdrop-blur-sm"
+              style={{
+                background: "linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7))",
+                boxShadow: "inset 0 0 0 1px rgba(11,18,37,0.7)",
+              }}
             >
-              Anual
-            </button>
-            <button
-              onClick={() => setCycle("semestral")}
-              className={`relative z-10 w-28 h-9 rounded-full text-sm transition-colors duration-200 ease-out ${
-                cycle === "semestral" ? "text-[#0b2a7e] font-semibold bg-neutral-200" : "text-neutral-600"
-              }`}
-            >
-              Semestral
-            </button>
-            <button
-              onClick={() => setCycle("mensal")}
-              className={`relative z-10 w-28 h-9 rounded-full text-sm transition-colors duration-200 ease-out ${
-                cycle === "mensal" ? "text-[#0b2a7e] font-semibold bg-neutral-200" : "text-neutral-600"
-              }`}
-            >
-              Mensal
-            </button>
+              <div
+                className="absolute inset-0 rounded-full opacity-40 pointer-events-none"
+                style={{
+                  backgroundImage: "radial-gradient(circle at 2px 2px, white 0.5px, transparent 0)",
+                  backgroundSize: "4px 4px",
+                }}
+                aria-hidden
+              />
+              <div
+                className="absolute top-1 h-9 rounded-full transition-all duration-300 ease-out pointer-events-none bg-[#0f2b8f] shadow-[0_2px_6px_rgba(15,43,143,0.4)]"
+                style={{
+                  left: pill.left,
+                  width: pill.width,
+                }}
+              />
+              <button
+                ref={annualRef}
+                type="button"
+                onClick={() => setCycle("anual")}
+                data-state={cycle === "anual" ? "on" : "off"}
+                aria-current={cycle === "anual" ? "true" : undefined}
+                className={`relative z-10 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f2b8f] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b1225] ${
+                  cycle === "anual" ? "text-white" : "text-white/90 hover:text-white"
+                }`}
+              >
+                Anual
+              </button>
+              <button
+                ref={semestralRef}
+                type="button"
+                onClick={() => setCycle("semestral")}
+                data-state={cycle === "semestral" ? "on" : "off"}
+                aria-current={cycle === "semestral" ? "true" : undefined}
+                className={`relative z-10 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f2b8f] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b1225] ${
+                  cycle === "semestral" ? "text-white" : "text-white/90 hover:text-white"
+                }`}
+              >
+                Semestral
+              </button>
+              <button
+                ref={mensalRef}
+                type="button"
+                onClick={() => setCycle("mensal")}
+                data-state={cycle === "mensal" ? "on" : "off"}
+                aria-current={cycle === "mensal" ? "true" : undefined}
+                className={`relative z-10 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f2b8f] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b1225] ${
+                  cycle === "mensal" ? "text-white" : "text-white/90 hover:text-white"
+                }`}
+              >
+                Mensal
+              </button>
+            </div>
           </div>
         </div>
 

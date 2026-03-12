@@ -137,6 +137,9 @@ export default {
 						transform: 'translateX(-50%) translateY(-100vh) scale(1.2)',
 						opacity: '0'
 					}
+				},
+				'shiny-toggle-spin': {
+					to: { transform: 'rotate(360deg)' }
 				}
 			},
 			animation: {
@@ -147,7 +150,8 @@ export default {
 				'grid-flow': 'grid-flow 4s ease-in-out infinite alternate',
 				'smoke-float': 'smoke-float 15s linear infinite',
 				'notification-delayed': 'pulse 2s infinite 1s',
-				'notification-delayed-2': 'pulse 2s infinite 2s'
+				'notification-delayed-2': 'pulse 2s infinite 2s',
+				'shiny-toggle-spin': 'shiny-toggle-spin 10s linear infinite'
 			},
 			backgroundImage: {
 				'tech-grid': `radial-gradient(circle at 1px 1px, rgba(59, 130, 246, 0.1) 1px, transparent 0)`,

@@ -53,6 +53,25 @@ export function PricingTable({
 }: PricingTableProps) {
   const [interval, setInterval] = React.useState<Interval>(defaultInterval);
   const [selectedPlan, setSelectedPlan] = React.useState<PlanLevel>(defaultPlan);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const monthlyRef = React.useRef<HTMLButtonElement>(null);
+  const semiannuallyRef = React.useRef<HTMLButtonElement>(null);
+  const yearlyRef = React.useRef<HTMLButtonElement>(null);
+  const [pill, setPill] = React.useState({ left: 0, width: 0 });
+
+  const intervalToRef = { monthly: monthlyRef, semiannually: semiannuallyRef, yearly: yearlyRef } as const;
+
+  React.useLayoutEffect(() => {
+    const btn = intervalToRef[interval].current;
+    const container = containerRef.current;
+    if (!btn || !container) return;
+    const cRect = container.getBoundingClientRect();
+    const bRect = btn.getBoundingClientRect();
+    setPill({
+      left: bRect.left - cRect.left,
+      width: bRect.width,
+    });
+  }, [interval]);
 
   const handlePlanSelect = (plan: PlanLevel) => {
     setSelectedPlan(plan);
@@ -72,47 +91,79 @@ export function PricingTable({
         {...props}
       >
         <div className="flex justify-end mb-4 sm:mb-8">
-          <div className="relative bg-white rounded-full px-1 py-1 w-[280px] h-11 flex items-center border border-neutral-300">
+          <div className="relative rounded-full overflow-hidden inline-block">
             <div
-              className={cn(
-                "absolute left-3 top-1.5 h-8 w-24 rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.06),0_4px_10px_rgba(0,0,0,0.06)] transition-transform duration-200 ease-out will-change-transform",
-                interval === "monthly"
-                  ? "translate-x-0"
-                  : interval === "semiannually"
-                  ? "translate-x-[84px]"
-                  : "translate-x-[168px]"
-              )}
+              className="absolute inset-0 rounded-full animate-shiny-toggle-spin"
+              style={{
+                background: "conic-gradient(from 0deg, transparent 72deg, #0f2b8f 90deg, white 108deg, #0f2b8f 126deg, transparent 360deg)",
+              }}
+              aria-hidden
             />
-            <button
-              type="button"
-              onClick={() => setInterval("monthly")}
-              className={cn(
-                "relative z-10 w-28 h-9 rounded-full text-sm transition-colors duration-200 ease-out",
-                interval === "monthly" ? "text-[#0b2a7e] font-semibold bg-neutral-200" : "text-neutral-600",
-              )}
+            <div
+              ref={containerRef}
+              role="group"
+              aria-label="Ciclo de cobrança"
+              className="relative inline-flex items-center gap-1 rounded-full p-1 min-w-0 m-[2px] overflow-hidden isolation-isolate backdrop-blur-sm"
+              style={{
+                background: "linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7))",
+                boxShadow: "inset 0 0 0 1px rgba(11,18,37,0.7)",
+              }}
             >
-              Mensal
-            </button>
-            <button
-              type="button"
-              onClick={() => setInterval("semiannually")}
-              className={cn(
-                "relative z-10 w-28 h-9 rounded-full text-sm transition-colors duration-200 ease-out",
-                interval === "semiannually" ? "text-[#0b2a7e] font-semibold bg-neutral-200" : "text-neutral-600",
-              )}
-            >
-              Semestral
-            </button>
-            <button
-              type="button"
-              onClick={() => setInterval("yearly")}
-              className={cn(
-                "relative z-10 w-28 h-9 rounded-full text-sm transition-colors duration-200 ease-out",
-                interval === "yearly" ? "text-[#0b2a7e] font-semibold bg-neutral-200" : "text-neutral-600",
-              )}
-            >
-              Anual
-            </button>
+              <div
+                className="absolute inset-0 rounded-full opacity-40 pointer-events-none"
+                style={{
+                  backgroundImage: "radial-gradient(circle at 2px 2px, white 0.5px, transparent 0)",
+                  backgroundSize: "4px 4px",
+                }}
+                aria-hidden
+              />
+              <div
+                className="absolute top-1 h-9 rounded-full transition-all duration-300 ease-out pointer-events-none bg-[#0f2b8f] shadow-[0_2px_6px_rgba(15,43,143,0.4)]"
+                style={{
+                  left: pill.left,
+                  width: pill.width,
+                }}
+              />
+              <button
+                ref={monthlyRef}
+                type="button"
+                onClick={() => setInterval("monthly")}
+                data-state={interval === "monthly" ? "on" : "off"}
+                aria-current={interval === "monthly" ? "true" : undefined}
+                className={cn(
+                  "relative z-10 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f2b8f] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b1225]",
+                  interval === "monthly" ? "text-white" : "text-white/90 hover:text-white",
+                )}
+              >
+                Mensal
+              </button>
+              <button
+                ref={semiannuallyRef}
+                type="button"
+                onClick={() => setInterval("semiannually")}
+                data-state={interval === "semiannually" ? "on" : "off"}
+                aria-current={interval === "semiannually" ? "true" : undefined}
+                className={cn(
+                  "relative z-10 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f2b8f] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b1225]",
+                  interval === "semiannually" ? "text-white" : "text-white/90 hover:text-white",
+                )}
+              >
+                Semestral
+              </button>
+              <button
+                ref={yearlyRef}
+                type="button"
+                onClick={() => setInterval("yearly")}
+                data-state={interval === "yearly" ? "on" : "off"}
+                aria-current={interval === "yearly" ? "true" : undefined}
+                className={cn(
+                  "relative z-10 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f2b8f] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b1225]",
+                  interval === "yearly" ? "text-white" : "text-white/90 hover:text-white",
+                )}
+              >
+                Anual
+              </button>
+            </div>
           </div>
         </div>
 

@@ -1,12 +1,12 @@
 "use client";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useMemo, useRef, useEffect, useState } from "react";
+import { useMemo, useRef, useEffect, useState, useCallback } from "react";
 import * as THREE from "three";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ShinyButton } from "./shiny-button";
 import { Badge } from "@/components/ui/badge";
-import { Check, Cpu, Lock, Sparkles, Zap } from "lucide-react";
+import { Check, Cpu, Expand, Lock, Sparkles, Volume2, VolumeX, Zap } from "lucide-react";
 import { getWhatsAppUrl } from "@/utils/whatsapp";
 import { motion } from "motion/react";
 import { useScroll, useTransform, motion as fmotion, MotionValue as FMotionValue } from "framer-motion";
@@ -17,6 +17,7 @@ import iaImg from "@/fotos/Prints do VBSolution/IAfunc.jpeg";
 import emailImg from "@/fotos/Prints do VBSolution/e-mail.jpeg";
 import whatsappPrintImg from "@/fotos/Prints do VBSolution/whatsapp.jpeg";
 import iaVideoSrc from "@/fotos/IA.video.mp4";
+import videoIA from "@/fotos/videoIA.mov";
 import vendasPipelineVideo from "@/fotos/vendas01.mov";
 import IntegracoesOficiais from "@/components/IntegracoesOficiais";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
@@ -307,6 +308,169 @@ interface HeroProps {
   microDetails?: Array<string>;
 }
 
+const VideoIASection = ({
+  openMedia,
+}: {
+  openMedia: (m: { type: "video" | "image"; src: string; alt?: string }) => void;
+}) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [captionsOn, setCaptionsOn] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+
+  const applyCaptions = useCallback(() => {
+    const el = videoRef.current;
+    if (!el?.textTracks?.length) return;
+    el.textTracks[0].mode = captionsOn ? "showing" : "hidden";
+  }, [captionsOn]);
+
+  useEffect(() => {
+    applyCaptions();
+  }, [applyCaptions]);
+
+  return (
+    <div className="aspect-video relative overflow-hidden rounded-2xl">
+      <div
+        className="absolute inset-0 cursor-pointer group"
+        role="button"
+        tabIndex={0}
+        aria-label="Ampliar vídeo em tela cheia"
+        onClick={() => openMedia({ type: "video", src: videoIA })}
+        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && openMedia({ type: "video", src: videoIA })}
+      >
+        <video
+          ref={videoRef}
+          src={videoIA}
+          autoPlay
+          muted={isMuted}
+          loop
+          playsInline
+          onLoadedMetadata={applyCaptions}
+          className="absolute inset-0 w-full h-full object-cover object-center saturate-110 pointer-events-none"
+        >
+          <track kind="captions" src="/legendas-videoIA.vtt" srcLang="pt-BR" label="Legendas" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0b1b3b]/70 via-transparent to-transparent pointer-events-none" />
+        <div className="pointer-events-none absolute inset-0 [background:linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:28px_28px] opacity-30" />
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-black/0 group-hover:bg-black/25 transition-colors duration-200 pointer-events-none">
+          <div className="rounded-full bg-white/20 p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <Expand className="size-8 text-white" strokeWidth={2} />
+          </div>
+          <span className="text-sm font-medium text-white drop-shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            Clique para ampliar
+          </span>
+        </div>
+        <div className="absolute bottom-3 right-3 z-10 flex items-center gap-1.5 text-white/80 text-xs pointer-events-none">
+          <Expand className="size-3.5" />
+          <span>Ampliar</span>
+        </div>
+      </div>
+      <div className="absolute bottom-3 left-3 z-20 flex items-center gap-2">
+        <button
+          type="button"
+          className="px-2 py-1 rounded text-xs font-medium bg-black/50 text-white/90 hover:bg-black/70 transition-opacity flex items-center gap-1.5"
+          onClick={(e) => {
+            e.stopPropagation();
+            setCaptionsOn((on) => !on);
+          }}
+          aria-label={captionsOn ? "Desativar legendas" : "Ativar legendas"}
+          data-state={captionsOn ? "on" : "off"}
+        >
+          {captionsOn ? "Legendas: On" : "Legendas"}
+        </button>
+        <button
+          type="button"
+          className="px-2 py-1 rounded text-xs font-medium bg-blue-600/80 text-white hover:bg-blue-600 transition-opacity flex items-center gap-1.5"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsMuted((m) => !m);
+          }}
+          aria-label={isMuted ? "Ouvir áudio do vídeo" : "Silenciar vídeo"}
+        >
+          {isMuted ? (
+            <>
+              <VolumeX className="size-3.5" />
+              <span>Ouvir áudio</span>
+            </>
+          ) : (
+            <>
+              <Volume2 className="size-3.5" />
+              <span>Áudio ligado</span>
+            </>
+          )}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const VideoVendasSection = ({
+  openMedia,
+}: {
+  openMedia: (m: { type: "video" | "image"; src: string; alt?: string }) => void;
+}) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [captionsOn, setCaptionsOn] = useState(false);
+
+  const applyCaptions = useCallback(() => {
+    const el = videoRef.current;
+    if (!el?.textTracks?.length) return;
+    el.textTracks[0].mode = captionsOn ? "showing" : "hidden";
+  }, [captionsOn]);
+
+  useEffect(() => {
+    applyCaptions();
+  }, [applyCaptions]);
+
+  return (
+    <div className="aspect-video relative overflow-hidden rounded-2xl">
+      <div
+        className="absolute inset-0 cursor-pointer group"
+        role="button"
+        tabIndex={0}
+        aria-label="Ampliar vídeo em tela cheia"
+        onClick={() => openMedia({ type: "video", src: vendasPipelineVideo })}
+        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && openMedia({ type: "video", src: vendasPipelineVideo })}
+      >
+        <video
+          ref={videoRef}
+          src={vendasPipelineVideo}
+          autoPlay
+          muted
+          loop
+          playsInline
+          onLoadedMetadata={applyCaptions}
+          className="absolute inset-0 w-full h-full object-cover object-center saturate-110 pointer-events-none"
+        >
+          <track kind="captions" src="/legendas-vendas.vtt" srcLang="pt-BR" label="Legendas" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0b1b3b]/70 via-transparent to-transparent pointer-events-none" />
+        <div className="pointer-events-none absolute inset-0 [background:linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:28px_28px] opacity-30" />
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-black/0 group-hover:bg-black/25 transition-colors duration-200 pointer-events-none">
+          <div className="rounded-full bg-white/20 p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <Expand className="size-8 text-white" strokeWidth={2} />
+          </div>
+          <span className="text-sm font-medium text-white drop-shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            Clique para ampliar
+          </span>
+        </div>
+        <div className="absolute bottom-3 right-3 z-10 flex items-center gap-1.5 text-white/80 text-xs pointer-events-none">
+          <Expand className="size-3.5" />
+          <span>Ampliar</span>
+        </div>
+      </div>
+      <button
+        type="button"
+        className="absolute bottom-3 left-3 z-20 px-2 py-1 rounded text-xs font-medium bg-black/50 text-white/90 hover:bg-black/70 transition-opacity"
+        onClick={() => setCaptionsOn((on) => !on)}
+        aria-label={captionsOn ? "Desativar legendas" : "Ativar legendas"}
+        data-state={captionsOn ? "on" : "off"}
+      >
+        {captionsOn ? "Legendas: On" : "Legendas"}
+      </button>
+    </div>
+  );
+};
+
 const SyntheticHero = ({
   title = "O seu último e melhor CRM",
   description = "O VBsolution é um CRM focado em vendas, com inteligência artificial para centralizar processos, equipes e resultados em um único sistema.",
@@ -570,23 +734,7 @@ const SyntheticHero = ({
               </div>
 
               <div className="relative rounded-3xl p-3 md:-mx-6 max-w-4xl mx-auto ring-1 ring-white/10 bg-white/5 backdrop-blur-md overflow-hidden shadow-2xl shadow-blue-500/10">
-                <div
-                  className="aspect-[21/9] relative cursor-zoom-in"
-                  role="button"
-                  aria-label="Ampliar vídeo"
-                  onClick={() => openMedia({ type: "video", src: iaVideoSrc })}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b1b3b]/60 to-transparent"></div>
-                  <div className="pointer-events-none absolute inset-0 [background:linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:28px_28px] opacity-40" />
-                  <video
-                    src={iaVideoSrc}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="absolute inset-0 w-full h-full rounded-2xl object-cover saturate-110 pointer-events-none"
-                  />
-                </div>
+                <VideoIASection openMedia={openMedia} />
               </div>
 
               <div className="relative mx-auto grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-8 lg:grid-cols-4">
@@ -651,22 +799,7 @@ const SyntheticHero = ({
                 <p className="max-w-sm text-xs md:text-sm text-neutral-400">A pipeline de vendas do VBSolution transforma oportunidades em um processo claro, organizado, do primeiro contato ao fechamento.</p>
               </div>
               <div className="relative rounded-3xl p-3 md:-mx-6 max-w-4xl mx-auto ring-1 ring-white/10 bg-white/5 backdrop-blur-md overflow-hidden shadow-2xl shadow-blue-500/10">
-                <div
-                  className="aspect-[21/9] relative cursor-zoom-in"
-                  role="button"
-                  aria-label="Ampliar vídeo"
-                  onClick={() => openMedia({ type: "video", src: vendasPipelineVideo })}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b1b3b]/60 to-transparent"></div>
-                  <video
-                    src={vendasPipelineVideo}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="absolute inset-0 w-full h-full rounded-2xl object-cover saturate-110 pointer-events-none"
-                  />
-                </div>
+                <VideoVendasSection openMedia={openMedia} />
               </div>
               <div className="relative mx-auto grid grid-cols-2 gap-x-3 gap-y-4 sm:gap-5 lg:grid-cols-4">
                 <div className="group rounded-xl p-4 bg-white/[0.03] hover:bg-white/[0.06] transition-colors">
